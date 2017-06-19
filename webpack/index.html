@@ -43,7 +43,7 @@
 
 				<section>
 					<h3>一个模块打包工具</h2>
-					<p>
+					<p style="text-align: justify;font-size: 28px;">
 						web开发中常用到的静态资源，主要是js,css,img, jade,等文件，webpack中，将静态资源文件称为模块。其可以兼容多种js书写规范(cmd,amd等规范)，且可以处理模块间的依赖关系，具有更强大的js模块化的功能。
 
 					</p>
@@ -55,8 +55,8 @@
 					<div style="float: left;width:50%;">
 						<img data-src="img/webpack.png" alt="webpack" />
 					</div>
-					<div style="float: left;width: 50%;">
-						当webpack处理程序时，它会递归的构建一个依赖关系图标，其中包含程序所需的每个模块，然后将所有这些模块打包成少量的bundle，通常只有一个，有浏览器加载。
+					<div style="float: left;width: 50%;font-size: 28px;text-align: justify;padding-top: 10px;">
+						当webpack处理程序时，它会递归的构建一个依赖关系图标，其中包含程序所需的每个模块，然后将所有这些模块打包成少量的bundle，由浏览器加载。
 
 					</div>
 				</section>
@@ -68,11 +68,16 @@
 					<section>
 						<p>与webpack不是一回事</p>
 					</section>
-					<section>
-						<p>grunt是来优化前端工作流程。比如自动刷新页面，压缩等，配置你需要的插件，把以前需要手工做的事情，让它帮你做了。</p>
+					<section style="text-align: justify;">
+						<p>grunt是来优化前端工作流程。比如自动刷新页面，压缩等,配置你需要的插件，把以前需要手工做的事情，让它帮你做了。</p>
 					</section>
 					<section>
 						<p>webpack & grunt/gulp 配合使用</p>
+						<p> npm i gulp-webpack</p>
+					</section>
+					<section data-markdown="">
+						- gulp: 处理html压缩/预处理/条件编译，压缩图片，精灵图自动合并等任务
+						- webpack: 管理模块化，构建js/css
 					</section>
 					<section data-markdown="">
 						- webpack & browserify
@@ -81,11 +86,15 @@
 					</section>
 					<section>
 						<p>seajs/require</p>	
+						<p style="text-align:justify;font-size: 28px;">
 						是一种在线"编译" 模块的方案，相当于在页面上加载一个 CMD/AMD 解释器。这样浏览器就认识了 define、exports、module 这些东西。也就实现了模块化。
+						</p>
 					</section>
 					<section>
 						<p>browserify/webpack</p>
+						<p style="text-align: justify;font-size: 28px;">
 						是一个预编译模块的方案，相比于上面 ，这个方案更加智能。没用过browserify，这里以webpack为例。首先，它是预编译的，不需要在浏览器中加载解释器。另外，你在本地直接写JS，不管是 AMD / CMD / ES6 风格的模块化，它都能认识，并且编译成浏览器认识的JS。
+						</p>
 					</section>
 
 
@@ -96,6 +105,9 @@
 				<section>
 					<section>
 						<h3> 安装</h3>
+					</section>
+					<section style="text-align: justify;">
+						webpack是一个基于node的项目，所以安装之前要确保node 和 npm 是否已准备好.
 					</section>
 					<section data-markdown="">
 						 - npm install --save-dev webpack//本地
@@ -123,13 +135,14 @@
 						</p>
 					</section>
 					<section>
-						<img data-src="/img/1.png"/>	
-						<img data-src="/img/4.png"/>
-						<img data-src="/img/2.png" />
+						<img data-src="/img/root.png"/>	
+						<img data-src="/img/cli1.png"/>
+						<img data-src="/img/build1.png" />
 					</section>
 					<section>
-						<img data-src="/img/3.png" />	
-						<img data-src="/img/5.png" />
+						<img data-src="/img/root.png" />
+						<img data-src="/img/cli2.png" />	
+						<img data-src="/img/build2.png" />
 					</section>
 					<section data-markdown="">
 						```js
