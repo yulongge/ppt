@@ -19,6 +19,16 @@
 
 		<!-- Code syntax highlighting -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<style>
+			.config pre {
+				width: 100%;
+				margin-top: 0px;
+			}
+			.config pre code {
+				font-size: 18px;
+				max-height: 650px;
+			}	
+		</style>
 
         
 
@@ -152,7 +162,7 @@
 					<section data-markdown="">
 						#### 使用配置文件		
 					</section>
-					<section data-markdown="">
+					<section data-markdown="" style="text-align: justify;">
 						配置文件默认为webpack.config.js	
 						```js
 							webpack //默认执行webpack.config.js
@@ -167,7 +177,7 @@
 					<section data-markdown="">
 						Webpack.config.js	
 					</section>			
-					<section data-markdown="">
+					<section data-markdown="" class="config">
 					```js
 						module.exports = {
 							entry: "./app/entry", //string | object | array 应用开始执行，webpack开始打包
@@ -211,17 +221,17 @@
 						- loader
 						- plugins
 					</section>
-					<section data-markdown="" style="text-align: left;font-size: 24px;">
+					<section data-markdown="" style="text-align: justify;font-size: 24px;">
 						- entry
 
-						webpack 将创建所有应用程序的依赖关系图标(dependency graph).图标的起点被称为入口起点(entry point).入口起点告诉webpack从哪里开始，并遵循着依赖关系图标知道要打包什么。可以认为是app的第一个启动文件。
+						webpack 将创建所有应用程序的依赖关系图表(dependency graph).图表的起点被称为入口起点(entry point).入口起点告诉webpack从哪里开始，并遵循着依赖关系图表知道要打包什么。可以认为是app的第一个启动文件。
 						```js
 							module.exports = {
 								entry: './path/to/my/entry/file.js'
 							}
 						```
 					</section>
-					<section data-markdown="" style="text-align: left;font-size: 22px;">
+					<section data-markdown="" style="text-align: justify;font-size: 22px;">
 						- output
 
 						将所有的资源归拢在一起后，还需要告诉webpack在哪里打包应用程序，就是如何处理归拢在一起的代码。
@@ -238,15 +248,15 @@
 							};
 						```
 					</section>
-					<section data-markdown="" style="text-align: left;font-size: 22px;">
+					<section data-markdown="" style="text-align: justify;font-size: 22px;">
 							- loader
 							
-							webpack的目标是，让webpack聚焦于项目中的所有资源，而浏览器不需要关注考虑这些，webpack把每个文件(.css,html, scss, jpg...)都当作模块处理，然而webpack值理解JavaScript.
-webpack loader 会将这些文件转为模块，儿转换后的文件会被添加到依赖图标中。
+							webpack的目标是，让webpack聚焦于项目中的所有资源，而浏览器不需要关注考虑这些，webpack把每个文件(.css,html, scss, jpg...)都当作模块处理，然而webpack只理解JavaScript.
+webpack loader 会将这些文件转为模块，而转换后的文件会被添加到依赖图标中。
 
 							配置有两个目标:
 							1. 识别应该被对应的loader，进行转换那些文件
-							2. 将被转换的文件添加到依赖图标中(并最终添加到bundle中)
+							2. 将被转换的文件添加到依赖图表中(并最终添加到bundle中)
 
 							```js
 								module.exports = {
@@ -267,7 +277,7 @@ webpack loader 会将这些文件转为模块，儿转换后的文件会被添�
 
 							> “嘿，webpack compiler，当你碰到「在 require()/import 语句中被解析为 '.js' 或 '.jsx' 的路径」时，在你把它们添加并打包之前，要先使用 babel-loader 去转换”。
 					</section>
-					<section data-markdown="" style="text-align: left;font-size: 22px;">
+					<section data-markdown="" style="text-align: justify;font-size: 22px;">
 						- plugins	
 
 						由于loader仅在每个文件的基础上执行转换，儿plugins最常用于(但不限于)在打包模块的compilation 和 chunk生命周期执行操作和自定义功能，webpack的插件系统极其强大和可定制化。
@@ -309,31 +319,26 @@ webpack loader 会将这些文件转为模块，儿转换后的文件会被添�
 						### loaders
 					</section>
 					<section data-markdown="" style="font-size: 20px;text-align: left;">
-						 文件
+						文件
+						- file-loader:	将文件发送到输出文件夹，并返回(相对)URL
+						- url-loader:	同file-loader一样工作， 但如果文件小于限制，可以返回data URL.
 
-						- file-loader 将文件发送到输出文件夹，并返回(相对)URL
-						- url-loader 同file-loader一样工作， 但如果文件小于限制，可以返回data URL
+						JSON
+						- json-loader:	加载JSON文件
 
-						 JSON
+						转换编译
 
-						- json-loader 加载JSON文件
-
-						 Transpiling 转换编译
-
-						- babel-loader 加载es6代码，使用babel转义为es5
-						- coffee-loader 像javascript一样加载CoffeeScript
+						- babel-loader:	加载es6代码，使用babel转义为es5
+						- coffee-loader:	像javascript一样加载CoffeeScript
 					</section>
-					<section data-markdown="" style="font-size: 20px; text-align: left;">
-
-						#### Templating 模板
-
+					<section data-markdown="" style="font-size: 20px;text-align: left;">
+						模板
 						- html-loader 导出HTML为字符串，需要引用静态资源
 						- jade-loader 
 						- markdown-loader 
 						- react-markdown-loader
 
-						#### style 样式
-
+						样式
 						- style-loader
 						- css-loader
 						- less-loader
@@ -341,14 +346,12 @@ webpack loader 会将这些文件转为模块，儿转换后的文件会被添�
 						- postcss-loader
 						- stylus-loader
 
-						#### Linting && Testing (清理和测试)
-
+						Linting && Testing (清理和测试)
 						- eslint-loader 
 						- jshint-loader
 						- mocah-loader
 
-						#### Frameworks 框架
-
+						Frameworks 框架
 						- vue-loader
 					</section>
 
@@ -358,9 +361,8 @@ webpack loader 会将这些文件转为模块，儿转换后的文件会被添�
 					<section data-markdown="">
 						### Plugins
 					</section>
-					<section data-markdown="">
-							webpack 有一个富插件接口，webpack自身的多数功能都是用这个插件接口，这个插件接口使webpack变得极其灵活。
-
+					<section data-markdown="" style="text-align: justify;font-size: 28px;">
+						webpack 有一个富插件接口，webpack自身的多数功能都是用这个插件接口，这个插件接口使webpack变得极其灵活。
 						- CommonsChunkPlugin
 						- ComponentWebpackPlugin
 						- CompressionWebpackPlugin
@@ -374,6 +376,14 @@ webpack loader 会将这些文件转为模块，儿转换后的文件会被添�
 						- LimitChunkCountPlugin
 						- NormalModuleReplacementPlugin
 					
+					</section>
+				</section>
+				<section>
+					<section data-markdown="">
+						###	demo
+					</section>
+					<section data-markdown="">
+						webpack + react + react-router + mobx
 					</section>
 				</section>
 			</div>
