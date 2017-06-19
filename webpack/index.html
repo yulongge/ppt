@@ -383,8 +383,188 @@ webpack loader 会将这些文件转为模块，而转换后的文件会被添�
 						###	demo
 					</section>
 					<section data-markdown="">
-						webpack + react + react-router + mobx
+						- 准备一个package.json
+						- 准备一个webapck.config.json
+						- 顺带来一个README.md
+						- 自创目录结构
 					</section>
+					<section>
+						<img data-src="img/demo_root.png" />
+					</section>
+					<section data-markdown="" class="config">
+						```js
+							var path = require('path');
+							var webpack = require("webpack");
+							var HtmlWebpackPlugin = require("html-webpack-plugin");
+							var OpenBrowserPlugin = require('open-browser-webpack-plugin');
+
+							var ROOT_PATH = path.resolve(__dirname);
+							var WEB_PATH = path.resolve(ROOT_PATH, 'src');
+							var BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
+
+							module.exports = {
+								entry: [
+									"babel-polyfill",
+									"whatwg-fetch",
+									WEB_PATH			
+								],
+								devServer: {
+									hot: true,
+									inline: true,
+									contentBase: BUILD_PATH,
+									port: 3000,
+									host: "0.0.0.0",
+									publicPath: "/",
+									historyApiFallback: true,
+									disableHostCheck: true
+								},
+								output: {
+									path: BUILD_PATH,
+									publicPath: "/",
+									filename: "app.[hash].js"
+								},
+								devtool: "eval",
+								resolve: {
+									extensions: ['.js', '.jsx', '.less', '.css', '.png', '.jpg', '.jpeg'],
+									alias: {
+										"components": path.join(WEB_PATH, '/components/index.js'),
+										"assets": path.join(WEB_PATH, '/assets')
+									}
+								},
+								module: {
+									rules: [
+										{
+											test: /\.js$/,
+											exclude: /node_modules/,
+											loader: "babel-loader",
+											options: {
+												presets: [
+													["es2015", {"modules": false}],
+													"stage-0",
+													"react"
+												],
+												plugins: [
+													"transform-async-to-generator",
+													"transform-decorators-legacy"
+												]
+											}
+										},
+										{
+											test: /\.less|css$/,
+											use: [
+												"style-loader",
+												"css-loader",
+												"less-loader"
+											]
+										},
+										{
+											test: /\.(png|jpg|gif|jpeg|svg|eot|woff|ttf|worff2)$/,
+											loader: 'file-loader'
+										}
+									]
+								},
+								plugins: [
+									new webpack.NamedModulesPlugin(),
+									new webpack.HotModuleReplacementPlugin(),
+									new HtmlWebpackPlugin({ hash: false, template: "./index.html"}),		
+									new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /nb/),
+									new OpenBrowserPlugin({url: 'http://localhost:3000', browser: "Google Chrome"}),
+
+									new webpack.optimize.CommonsChunkPlugin({name: "common", filename: "common.js"}),
+
+								]
+							}
+
+						```
+					</section>
+					<section>
+						entry
+
+						<img data-src="img/demo_entry.png" />
+					</section>
+					<section data-markdown="">
+						npm scripts
+						```js
+							"scripts": {
+   								"start": "webpack-dev-server --config webpack.config.js",
+								"build": "rimraf ./dist && webpack --config webpack.config.production.js"
+							},
+						```
+					</section>
+					<section>
+						运行npm start
+						<img data-src="img/demo_npmstart.png" />
+					</section>
+					<section data-markdown="">
+						```js
+							var path = require('path');
+							var webpack = require('webpack');
+							var HtmlWebpackPlugin = require('html-webpack-plugin');
+							var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+							var ROOT_PATH = path.resolve(__dirname);
+							var WEB_PATH = path.resolve(ROOT_PATH, 'src');
+							var BUILD_PATH = path.resolve(ROOT_PATH, 'dist');
+
+							module.exports = {
+								entry: {
+									vendor: ["react", "react-dom", "react-router"],
+									app: ["babel-polyfill", WEB_PATH]
+								},
+								output: {
+									path: BUILD_PATH,
+									publicPath: "/",
+									filename: "assets/[name].[hash].js",
+									chunkFilename: "assets/[name].[chunkhash].js"
+								},
+								devtool: 'cheap-module-source-map',
+								resolve: {
+									extensions: ['.js', '.jsx', '.less', '.css', '.png', '.jpg', '.jpeg'],
+									alias: {
+										"components": path.join(WEB_PATH, '/components/index.js'),
+										"assets": path.join(WEB_PATH, '/assets')
+									}
+								},
+								module: {
+									rules: [...]	
+								},
+								plugins: [
+									new webpack.DefinePlugin({
+										"process.env": {
+											NODE_ENV: JSON.stringify("production")
+										}
+									}),
+									new webpack.NamedModulesPlugin(),
+									new webpack.optimize.OccurrenceOrderPlugin(true),
+									new webpack.optimize.CommonsChunkPlugin({
+										name: "vendor",
+										minChunks: Infinity
+									}),
+									new webpack.optimize.UglifyJsPlugin({
+										minimize: true,
+										compress: {
+											warnings: false,
+											drop_console: true,
+											screw_ie8: true
+										},
+										output: {
+											comments: false
+										}
+									}),
+									new ExtractTextPlugin("assets/styles.css"),
+									new HtmlWebpackPlugin({
+										hash: false,
+										template: "./index.html"
+									})
+								]
+								}
+						```
+					</section>
+					<section>
+						运行npm run build
+						<img data-src="img/demo_build.png" />
+					</section>
+					
 				</section>
 			</div>
 
