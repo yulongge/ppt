@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>webpack</title>
+
+		<meta name="description" content="webpack ">
+		<meta name="author" content="geyulong">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+        
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>webpack</h1>
+					<h3>module bundler </h3>
+					<p>
+						<small>Created by <a href="https://github.com/geyulong">geyulong</a> / <a href="mailto:gaiyulong@gmail.com">@geyulong</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h3>一个模块打包工具</h2>
+					<p>
+						web开发中常用到的静态资源，主要是js,css,img, jade,等文件，webpack中，将静态资源文件称为模块。其可以兼容多种js书写规范(cmd,amd等规范)，且可以处理模块间的依赖关系，具有更强大的js模块化的功能。
+
+					</p>
+				</section>
+				<section>
+					<img data-src="img/webpack.png" alt="webpack" />
+				</section>
+				<section>
+					<div style="float: left;width:50%;">
+						<img data-src="img/webpack.png" alt="webpack" />
+					</div>
+					<div style="float: left;width: 50%;">
+						当webpack处理程序时，它会递归的构建一个依赖关系图标，其中包含程序所需的每个模块，然后将所有这些模块打包成少量的bundle，通常只有一个，有浏览器加载。
+
+					</div>
+				</section>
+				<section>
+					<section>
+						<h3>Grunt/Gulp</h3>
+						<p>前端构建工具</p>
+					</section>
+					<section>
+						<p>与webpack不是一回事</p>
+					</section>
+					<section>
+						<p>grunt是来优化前端工作流程。比如自动刷新页面，压缩等，配置你需要的插件，把以前需要手工做的事情，让它帮你做了。</p>
+					</section>
+					<section>
+						<p>webpack & grunt/gulp 配合使用</p>
+					</section>
+					<section data-markdown="">
+						- webpack & browserify
+
+						- seajs & requirejs
+					</section>
+					<section>
+						<p>seajs/require</p>	
+						是一种在线"编译" 模块的方案，相当于在页面上加载一个 CMD/AMD 解释器。这样浏览器就认识了 define、exports、module 这些东西。也就实现了模块化。
+					</section>
+					<section>
+						<p>browserify/webpack</p>
+						是一个预编译模块的方案，相比于上面 ，这个方案更加智能。没用过browserify，这里以webpack为例。首先，它是预编译的，不需要在浏览器中加载解释器。另外，你在本地直接写JS，不管是 AMD / CMD / ES6 风格的模块化，它都能认识，并且编译成浏览器认识的JS。
+					</section>
+
+
+				</section>
+				<section>
+					<h3> welcome to webpack!</h3>
+				</section>
+				<section>
+					<section>
+						<h3> 安装</h3>
+					</section>
+					<section data-markdown="">
+						 - npm install --save-dev webpack//本地
+						 - npm install --save-dev webpack@version
+						 - npm install --g webpack //全局
+					</section>
+
+				</section>
+				<section>
+					<section>
+						<h3> 使用</h3>
+					</section>
+					<section data-markdown="">
+						- 命令行使用
+						- 配置文件使用
+					</section>
+					<section data-markdown="">
+						<h2>命令行使用</h2>
+						```js
+						webpack entry [entry] output
+						```
+						<p style="font-size: 16px">
+						- entry 一个文件名或被一组被命名的文件名，作为构建项目的入口起点，可以传入多个入口
+						- output 要保存bundled文件的路径和文件名。它将映射到配置选项output.path 和 output.filename
+						</p>
+					</section>
+					<section>
+						<img data-src="/img/1.png"/>	
+						<img data-src="/img/4.png"/>
+						<img data-src="/img/2.png" />
+					</section>
+					<section>
+						<img data-src="/img/3.png" />	
+						<img data-src="/img/5.png" />
+					</section>
+					<section data-markdown="">
+						```js
+							webpack --help / -h
+						```
+					</section>
+					<section data-markdown="">
+						#### 使用配置文件		
+					</section>
+					<section data-markdown="">
+						配置文件默认为webpack.config.js	
+						```js
+							webpack //默认执行webpack.config.js
+						```
+						如果你想使用其他配置文件，可以用--config参数
+						```js
+							webpack --config example.config.js	
+						```
+					</section>
+				</section>
+				<section >
+					<section data-markdown="">
+						Webpack.config.js	
+					</section>			
+					<section data-markdown="">
+					```js
+						module.exports = {
+							entry: "./app/entry", //string | object | array 应用开始执行，webpack开始打包
+							output: {
+								path: path.resolve(__dirname, "dist"), //string
+								filename: 'bundle.js',
+								publickPath: "",
+								library: '',
+								library: 'umd',
+								...
+							},
+							module: { //模块配置
+								rules: [
+									//模块规则【配置loader,解析器等选项
+								]
+							},
+							resolve: { //解析模块请求的选项
+								modules: [],
+								extensions: ['', '.js', '.json', '.scss'],
+								alias: {
+									AppStore: 'js/stores/AppStores.js',
+									...
+								}
+							},
+							devtool: "source-map",
+							context: "",
+							target: "",
+							externals: [],
+							devServer: [],
+							plugins: [],
+							performance: {},
+							...
+						}
+					```
+	
+					</section>
+					<section data-markdown="">
+						我们先理解四个核心概念
+						- entry
+						- output
+						- loader
+						- plugins
+					</section>
+					<section data-markdown="" style="text-align: left;font-size: 24px;">
+						- entry
+
+						webpack 将创建所有应用程序的依赖关系图标(dependency graph).图标的起点被称为入口起点(entry point).入口起点告诉webpack从哪里开始，并遵循着依赖关系图标知道要打包什么。可以认为是app的第一个启动文件。
+						```js
+							module.exports = {
+								entry: './path/to/my/entry/file.js'
+							}
+						```
+					</section>
+					<section data-markdown="" style="text-align: left;font-size: 22px;">
+						- output
+
+						将所有的资源归拢在一起后，还需要告诉webpack在哪里打包应用程序，就是如何处理归拢在一起的代码。
+						
+						```js
+							const path = require('path');
+
+							module.exports = {
+							  entry: './path/to/my/entry/file.js',
+							  output: {
+								path: path.resolve(__dirname, 'dist'),
+								filename: 'my-first-webpack.bundle.js'
+							  }
+							};
+						```
+					</section>
+					<section data-markdown="" style="text-align: left;font-size: 22px;">
+							- loader
+							
+							webpack的目标是，让webpack聚焦于项目中的所有资源，而浏览器不需要关注考虑这些，webpack把每个文件(.css,html, scss, jpg...)都当作模块处理，然而webpack值理解JavaScript.
+webpack loader 会将这些文件转为模块，儿转换后的文件会被添加到依赖图标中。
+
+							配置有两个目标:
+							1. 识别应该被对应的loader，进行转换那些文件
+							2. 将被转换的文件添加到依赖图标中(并最终添加到bundle中)
+
+							```js
+								module.exports = {
+									entry: './path/to/my/entry/file.js'
+									output: {
+										path: path.resolve(__dirname, 'dist'),
+										filename: 'my-first-webpack.bundle.js'
+									},
+									module: {
+										rules: [
+										  {test: /\.(js|jsx)$/, use: 'babel-loader'}
+										]
+									}
+								}
+							```
+
+							以上配置中，对一个单独的module对象定义了rules属性，里边包含两个必须属性：test 和 use.
+
+							> “嘿，webpack compiler，当你碰到「在 require()/import 语句中被解析为 '.js' 或 '.jsx' 的路径」时，在你把它们添加并打包之前，要先使用 babel-loader 去转换”。
+					</section>
+					<section data-markdown="" style="text-align: left;font-size: 22px;">
+						- plugins	
+
+						由于loader仅在每个文件的基础上执行转换，儿plugins最常用于(但不限于)在打包模块的compilation 和 chunk生命周期执行操作和自定义功能，webpack的插件系统极其强大和可定制化。
+
+						想要一个插件，你只需要require它，然后把它天骄到plugins数组中，多数插件可以通过选项option自定义。也可以在一个配置文件中因不同目的而多次使用同一个插件，你需要用new来创建实例，并调用它。
+
+						```js
+							const HtmlWebpackPlugin = require('html-webpack-plugin'); //installed via npm
+							const webpack = require('webpack'); //to access built-in plugins
+							const path = require('path');
+
+							const config = {
+							  entry: './path/to/my/entry/file.js',
+							  output: {
+								path: path.resolve(__dirname, 'dist'),
+								filename: 'my-first-webpack.bundle.js'
+							  },
+							  module: {
+								rules: [
+								  {test: /\.(js|jsx)$/, use: 'babel-loader'}
+								]
+							  },
+							  plugins: [
+								new webpack.optimize.UglifyJsPlugin(),
+								new HtmlWebpackPlugin({template: './src/index.html'})
+							  ]
+							};
+
+							module.exports = config;
+						```
+
+					</section>
+
+						
+				</section>
+
+				<section>
+					<section data-markdown="">
+						### loaders
+					</section>
+					<section data-markdown="" style="font-size: 20px;text-align: left;">
+						 文件
+
+						- file-loader 将文件发送到输出文件夹，并返回(相对)URL
+						- url-loader 同file-loader一样工作， 但如果文件小于限制，可以返回data URL
+
+						 JSON
+
+						- json-loader 加载JSON文件
+
+						 Transpiling 转换编译
+
+						- babel-loader 加载es6代码，使用babel转义为es5
+						- coffee-loader 像javascript一样加载CoffeeScript
+					</section>
+					<section data-markdown="" style="font-size: 20px; text-align: left;">
+
+						#### Templating 模板
+
+						- html-loader 导出HTML为字符串，需要引用静态资源
+						- jade-loader 
+						- markdown-loader 
+						- react-markdown-loader
+
+						#### style 样式
+
+						- style-loader
+						- css-loader
+						- less-loader
+						- sass-loader
+						- postcss-loader
+						- stylus-loader
+
+						#### Linting && Testing (清理和测试)
+
+						- eslint-loader 
+						- jshint-loader
+						- mocah-loader
+
+						#### Frameworks 框架
+
+						- vue-loader
+					</section>
+
+				</section>
+
+				<section>
+					<section data-markdown="">
+						### Plugins
+					</section>
+					<section data-markdown="">
+							webpack 有一个富插件接口，webpack自身的多数功能都是用这个插件接口，这个插件接口使webpack变得极其灵活。
+
+						- CommonsChunkPlugin
+						- ComponentWebpackPlugin
+						- CompressionWebpackPlugin
+						- DefinePlugin
+						- EnvironmentPlugin
+						- DllPlugin
+						- ExtractTextWebpackPlugin
+						- HtmlWebpackPlugin
+						- IgnorePlugin
+						- I18nWebpackPlugin
+						- LimitChunkCountPlugin
+						- NormalModuleReplacementPlugin
+					
+					</section>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					
+						
+
+					{
+						src: 'plugin/highlight/highlight.js',
+					    condition: undefined,
+					    async: true,
+					    callback: function() { hljs.initHighlightingOnLoad(); }
+				    },
+
+						
+
+					
+						
+
+					{
+						src: 'plugin/markdown/marked.js',
+					    condition: function() { return !!document.querySelector( '[data-markdown]' ); },
+					    async: false,
+					    callback: undefined
+				    },
+
+						
+
+					{
+						src: 'plugin/markdown/markdown.js',
+					    condition: function() { return !!document.querySelector( '[data-markdown]' ); },
+					    async: false,
+					    callback: undefined
+				    },
+
+						
+
+					
+						
+
+					{
+						src: 'plugin/math/math.js',
+					    condition: undefined,
+					    async: true,
+					    callback: undefined
+				    },
+
+						
+
+					
+						
+
+					{
+						src: 'plugin/zoom-js/zoom.js',
+					    condition: undefined,
+					    async: true,
+					    callback: undefined
+				    },
+
+						
+
+					
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
