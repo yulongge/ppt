@@ -176,7 +176,7 @@ Loaders是webpack中最让人激动人心的功能之一了。通过使用不同
 	}
 ```
 
-以上配置中，对一个单独的module对象定义了rules属性，里边的每一项基本都是loaders，里边包含两个必须属性：test 和 use.
+以上配置中，对一个单独的module对象定义了rules属性，里边的每一项基本都是loaders，里边包含两个必须属性：test 和 loader.
 
 - test：一个匹配loaders所处理的文件的拓展名的正则表达式（必须）
 - loader: loaders的别名(新版)：loader的名称（必须）
