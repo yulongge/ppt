@@ -199,7 +199,7 @@
 
 	（关注公众号,微生活前端开发)请大家掏出手机来搞事情...
 
-	![公众号](https://mp.weixin.qq.com/mp/qrcode?scene=10000004&size=102&__biz=MzI0MDYzOTEyOA==&mid=2247483727&idx=1&sn=4961e7a7a0bd9922fe2559da7bcebe36&send_time=)
+	![公众号](https://yulongge.github.io/ppt/img/qrcode.png)
 
 	当然了，我在这里重点说一下react中的使用，相比于redux，mobx太灵活了，灵活的总是想给他个壳子套用。
 
@@ -486,7 +486,7 @@
 
 	无话可说了已经...
 	一个图够了
-	![react](http://upload-images.jianshu.io/upload_images/326507-281c610cec06a015.png?imageMogr2/auto-orient/strip%7CimageView2/2)
+	![react](https://yulongge.github.io/ppt/img/react.png)
 
 
 - [json-server](https://github.com/typicode/json-server)
