@@ -42,6 +42,18 @@
 在认识项目的过程中，学习了一些相关的知识.具体的api并不会详细列出，只是觉得先知道这些就可以开战了，在实际开发中自己google，才可以对相应的api印象深刻...
 
 - [less](http://lesscss.org/)
+- [mobx](https://mobx.js.org/)
+- [grunt](https://gruntjs.com/)
+- [eslint](http://eslint.cn/)
+- [react](https://facebook.github.io/react/)
+- [json-server](https://github.com/typicode/json-server)
+- [react-router](https://github.com/ReactTraining/react-router)
+- [webpack](https://doc.webpack-china.org/)
+- [express](http://expressjs.com/zh-cn/)
+
+以下做其中一些知识点的总结(简单粗暴一点)
+
+- [less](http://lesscss.org/)
 	预处理css的工具
 
 	+ 使用方法
@@ -572,5 +584,4 @@
 	
 		
 
-	
-
+文档没有写那么全面，可能有些以偏概全，日后有机会一一分享给大家。
