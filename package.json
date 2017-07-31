@@ -1,0 +1,22 @@
+{
+  "name": "ppt",
+  "version": "1.0.0",
+  "description": "ppt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yulongge/ppt.git"
+  },
+  "author": "geyulong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yulongge/ppt/issues"
+  },
+  "homepage": "https://github.com/yulongge/ppt#readme",
+  "dependencies": {
+    "yeoman-generator": "^1.1.1"
+  }
+}

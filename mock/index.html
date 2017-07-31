@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>mock</title>
+
+		<meta name="description" content="webpack ">
+		<meta name="author" content="geyulong">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<style>
+			.config pre {
+				width: 100%;
+				margin-top: 0px;
+			}
+			.config pre code {
+				font-size: 18px;
+				max-height: 650px;
+			}
+		</style>
+
+
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<p style="font-size: 100px;">Mock</p>
+					<h3>构建数据，实现rest风格api接口 </h3>
+					<p>
+						<small>Created by <a href="https://github.com/geyulong">geyulong</a> / <a href="mailto:gaiyulong@gmail.com">@geyulong</a></small>
+					</p>
+				</section>
+				<section style="text-align: center;font-size: 100px;">
+					<p>express for mock</p>
+				</section>
+
+				<section>
+					<p style="font-size: 80px;">Express</p>
+					<p style="text-align: left;font-size: 28px;">
+						高度包容,快速而极简的 Node.js Web框架
+					</p>
+					<p style="text-align: left;font-size: 28px;">express 一种保持最低程度规模的灵活 Node.js Web应用框架，它提供精简基本Web应用程序功能，而不会隐藏你了解和青睐 Node.js功能。</p>
+				</section>
+
+				<section  data-markdown="">
+					<p style="	">install</p>
+					```js
+						npm init //创建一个package.json
+						npm install express --save
+					```
+				</section>
+
+				<section>
+					<section data-markdown="">
+						###原理
+						Express建立在 Node.js 内置的http模块上
+					</section>
+					<section data-markdown="" style="font-size: 30px;text-align: left;">
+						如果用http模块生成服务器如下
+						```js
+						var http = require('http');
+						var app = http.createServer(function(request, response) {
+							response.writeHead(200, {"Content-Type": "text/plain"});
+							response.end("Hello world");
+						});
+						app.listen(3000, "localhost");
+						```
+
+						express封装(核心是对http模块的再包装)
+						```js
+						var express = require('express');
+						var app = express();
+						app.get('/', function(req, res) {
+							res.send("Hello world");
+						});
+						app.listen(3000):
+						```
+						Express 框架等价于在http模块之上，加了一个中间层.
+					</section>
+					<section data-markdown="" style="font-size: 20px;text-align: left;">
+
+					</section>
+
+				</section>
+
+				<section>
+					<section data-markdown="">
+						### 中间件(middleware)
+					</section>
+					<section data-markdown="" style="text-align: justify;font-size: 28px;">
+						middleware 就是处理HTTP请求的函数。其特点就是，一个中间件处理完，再传递给下一个中间件。
+
+						从本质上讲，一个express就是在调用各种中间件
+
+					</section>
+					<section data-markdown="" class="config" style="text-align: justify;font-size: 28px;">
+						### 分类
+					</section>
+					<section data-markdown="" class="config" style="text-align: justify;font-size: 28px;">
+						- 应用级中间件
+
+						1.app.use()
+
+						use是express注册中间件的方法，返回一个函数。
+
+						2.app.METHOD()
+
+						除了get方法以外，Express还提供了post，put，delete方法，即HTTP动词都是Express的方法。
+					</section>
+					<section data-markdown="" class="config" style="text-align: justify;font-size: 28px;">
+						- 路由级中间件
+
+						```js
+						var router = express.Router();
+						```
+						使用router.use() 和 router.VERB()加载
+						```js
+						router.use(function(req, res, next) { //没挂路径，每个请求都回执行
+						 	console.log('Time', Date.now());
+						 	next();
+						 });
+						 router.get('/user/:id', function() (req, res, next) {
+						 	res.render('regular');
+						 })
+						```
+					</section>
+					<section data-markdown="" class="config" style="text-align: left;font-size: 40px;">
+						- 错误处理中间件
+
+						```js
+						app.use(function(err, req, res, next) {
+						 	console.log(err.stack);
+						 	res.status(500).send('Something broke!');
+						})
+						```
+						> 定义处理错误中间件必须使用4个参数，即使不需要next对象，也必须在签名中声明它。
+					</section>
+					<section data-markdown="" class="config" style="text-align: justify;font-size: 28px;">
+						- 内置中间件
+
+						从4.x版本开始，Express已经不再依赖Connect了，除了express.static, Express以前内置的中间件现在已经全部单独作为模块安装使用了。 express.static是Express唯一内置的中间件。
+
+						```js
+						var options = {
+						   dotfiles: 'ignore',
+						   etag: false,
+						   extensions: ['htm', 'html'],
+						   index: false,
+						   maxAge: '1d',
+						   redirect: false,
+						   setHeaders: function (res, path, stat) {
+						 	res.set('x-timestamp', Date.now());
+						   }
+						 };
+
+						 app.use(express.static('public', options));
+						```
+
+						每个目录可有多个静态目录：
+
+						```js
+							app.use(express.static('public'));
+							app.use(express.static('uploads'));
+							app.use(express.static('files'));
+						```
+					</section>
+					<section data-markdown="" class="config" style="text-align: justify;font-size: 28px;">
+						- 第三方中间件
+
+						通过使用第三方中间件从而为express应用增加更多功能
+
+						```js
+						npm install cookie-parser //先安装所需node模块
+
+						var cookieParser = require('cookie-parser');
+						app.user(cookieParser());
+						```
+					</section>
+				</section>
+				<section >
+					<section>
+						<h3>方法</h3>
+					</section>
+					<section data-markdown="" style="text-align: justify;font-size: 28px;">
+						###	set
+						```js
+						app.set("views", __dirname + "/views");
+						app.set("view engine", "jade");
+						```
+
+					</section>
+					<section data-markdown="" style="text-align: justify;font-size: 28px;">
+						###	response对象
+						- response.redirect
+						- response.sendFile
+						- response.render
+
+					</section>
+					<section data-markdown="" style="text-align: justify;font-size: 28px;">
+						###	request对象
+						- request.ip
+						- request.files
+
+					</section>
+
+				</section>
+				<section>
+					faker.js
+
+					用来mock数据，有自己的API，而且非常丰富
+				</section>
+				<section>
+					<section data-markdown="">
+						###	install
+
+						```js
+						npm i faker --save
+						```
+					</section>
+					<section data-markdown="">
+					```js
+					var faker = require('faker');
+
+					var randomName = faker.name.findName();
+					var randomEmail = faker.internet.email();
+					var randomCard = faker.helpers.createCard();
+					```
+					</section>
+					<section>
+						Faker.fake()
+
+						```js
+						var json = faker.fake("{{name.lastName}}, {{name.firstName}}, {{name.suffix}}");
+						console.log(json) //"Marks, Dean Sr."
+						```
+					</section>
+					<section data-markdown="" class="config">
+
+						Localization
+
+						```js
+							faker.locale = "zh_CN";
+						```
+					</section>
+
+				</section>
+				<section  data-markdown="">
+					<p style="	">json-server</p>
+					```js
+						npm install json-server --save
+					```
+				</section>
+				<section  data-markdown="">
+					<p style="	">运行</p>
+					```js
+						json-server db.json -p 3003
+					```
+
+					安装完后，在本目录下创建一个xx.json,然后执行
+				</section>
+
+				<section  data-markdown="">
+					<p style="	">Mock.js</p>
+					```js
+						json-server db.json -p 3003
+					```
+
+					安装完后，在本目录下创建一个xx.json,然后执行
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+
+
+
+					{
+						src: 'plugin/highlight/highlight.js',
+					    condition: undefined,
+					    async: true,
+					    callback: function() { hljs.initHighlightingOnLoad(); }
+				    },
+
+
+
+
+
+
+					{
+						src: 'plugin/markdown/marked.js',
+					    condition: function() { return !!document.querySelector( '[data-markdown]' ); },
+					    async: false,
+					    callback: undefined
+				    },
+
+
+
+					{
+						src: 'plugin/markdown/markdown.js',
+					    condition: function() { return !!document.querySelector( '[data-markdown]' ); },
+					    async: false,
+					    callback: undefined
+				    },
+
+
+
+
+
+
+					{
+						src: 'plugin/math/math.js',
+					    condition: undefined,
+					    async: true,
+					    callback: undefined
+				    },
+
+
+
+
+
+
+					{
+						src: 'plugin/zoom-js/zoom.js',
+					    condition: undefined,
+					    async: true,
+					    callback: undefined
+				    },
+
+
+
+
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
