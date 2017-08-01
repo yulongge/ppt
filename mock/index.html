@@ -45,13 +45,22 @@
 			<div class="slides">
 				<section>
 					<p style="font-size: 100px;">Mock</p>
-					<h3>构建数据，实现rest风格api接口 </h3>
+					<p>模拟数据，实现restful风格API </p>
 					<p>
 						<small>Created by <a href="https://github.com/geyulong">geyulong</a> / <a href="mailto:gaiyulong@gmail.com">@geyulong</a></small>
 					</p>
 				</section>
+				<section data-markdown="">
+					### 两种方式
+					
+					- Express for mock
+					- Json-server
+				</section>
 				<section style="text-align: center;font-size: 100px;">
-					<p>express for mock</p>
+					<p>Express for mock</p>
+				</section>
+				<section style="text-align: left;font-size: 40px;">
+					<p>因为我们要实现restful风格的api，所以我们需要构建服务器</p>
 				</section>
 
 				<section>
@@ -59,7 +68,9 @@
 					<p style="text-align: left;font-size: 28px;">
 						高度包容,快速而极简的 Node.js Web框架
 					</p>
-					<p style="text-align: left;font-size: 28px;">express 一种保持最低程度规模的灵活 Node.js Web应用框架，它提供精简基本Web应用程序功能，而不会隐藏你了解和青睐 Node.js功能。</p>
+					<p style="text-align: left;font-size: 28px;">
+						express 一种保持最低程度规模的灵活 Node.js Web应用框架，它提供精简基本Web应用程序功能，而不会隐藏你了解和青睐 Node.js功能。
+					</p>
 				</section>
 
 				<section  data-markdown="">
@@ -97,15 +108,12 @@
 						```
 						Express 框架等价于在http模块之上，加了一个中间层.
 					</section>
-					<section data-markdown="" style="font-size: 20px;text-align: left;">
-
-					</section>
 
 				</section>
 
 				<section>
-					<section data-markdown="">
-						### 中间件(middleware)
+					<section style="font-size: 50px;">
+						中间件(middleware)
 					</section>
 					<section data-markdown="" style="text-align: justify;font-size: 28px;">
 						middleware 就是处理HTTP请求的函数。其特点就是，一个中间件处理完，再传递给下一个中间件。
@@ -125,10 +133,11 @@
 
 						2.app.METHOD()
 
-						除了get方法以外，Express还提供了post，put，delete方法，即HTTP动词都是Express的方法。
+						METHOD是http请求方法,即HTTP动词都是Express的方法。
 					</section>
 					<section data-markdown="" class="config" style="text-align: justify;font-size: 28px;">
 						- 路由级中间件
+
 
 						```js
 						var router = express.Router();
@@ -144,7 +153,7 @@
 						 })
 						```
 					</section>
-					<section data-markdown="" class="config" style="text-align: left;font-size: 40px;">
+					<section data-markdown="" class="config" style="text-align: left;font-size: 30px;">
 						- 错误处理中间件
 
 						```js
@@ -153,12 +162,14 @@
 						 	res.status(500).send('Something broke!');
 						})
 						```
-						> 定义处理错误中间件必须使用4个参数，即使不需要next对象，也必须在签名中声明它。
+						定义处理错误中间件必须使用4个参数，即使不需要next对象，也必须在签名中声明它。
 					</section>
 					<section data-markdown="" class="config" style="text-align: justify;font-size: 28px;">
 						- 内置中间件
 
 						从4.x版本开始，Express已经不再依赖Connect了，除了express.static, Express以前内置的中间件现在已经全部单独作为模块安装使用了。 express.static是Express唯一内置的中间件。
+
+						负责在Express应用中托管静态资源。
 
 						```js
 						var options = {
@@ -195,43 +206,168 @@
 						var cookieParser = require('cookie-parser');
 						app.user(cookieParser());
 						```
+
+						[第三方中间件列表](http://www.expressjs.com.cn/resources/middleware.html)
 					</section>
 				</section>
-				<section >
-					<section>
-						<h3>方法</h3>
-					</section>
+				<section>
+					<section>Router</section>
 					<section data-markdown="" style="text-align: justify;font-size: 28px;">
-						###	set
+						路由是由一个 URI、HTTP 请求（GET、POST等）和若干个句柄组成，它的结构如下： app.METHOD(path, [callback...], callback)， app 是 express 对象的一个实例， METHOD 是一个 HTTP 请求方法， path 是服务器上的路径， callback 是当路由匹配时要执行的函数。		
+					</section>
+					<section data-markdown="">
+						- 基本路由
+
 						```js
-						app.set("views", __dirname + "/views");
-						app.set("view engine", "jade");
+							var express = require('express');
+							var app = express();
+
+							// respond with "hello world" when a GET request is made to the homepage
+
+							app.get('/', function(req, res) {
+							  res.send('hello world');
+							});		
+						```
+					</section>
+					<section data-markdown="">
+						- 路由方法
+
+						```js
+						// GET method route
+						app.get('/', function (req, res) {
+						  res.send('GET request to the homepage');
+						});
+
+						// POST method route
+						app.post('/', function (req, res) {
+						  res.send('POST request to the homepage');
+						});
+
+						//....get, post, put, head, delete, options, trace, copy....
+
+						app.all('/secret', function (req, res, next) {
+						  console.log('Accessing the secret section ...');
+						  next(); // pass control to the next handler
+						});
+
+						```
+						app.all()是一个特殊的路由方法，没有任何http方法与其对应，它的作用是对于一个路径上的所有请求加载中间件。
+					</section>
+					<section data-markdown="">
+					- 路由路径
+
+					他可以是字符串，字符串模式，正则表达式。
+
+					```js
+					app.get('/', function(req, res) {...}); // 匹配根路径的请求
+					app.get('/about', function(req, res) {...});// 匹配 /about 路径的请求
+					app.get('/help.json', function(req, res) {...});// 匹配 /random.text 路径的请求
+
+					app.get('/ab?cd', function(req, res) {...});// 匹配 acd 和 abcd
+					app.get('/ab+cd', function(req, res) {...});// 匹配 abcd、abbcd、abbbcd等
+					app.get('/ab * cd', function(req, res) {...});// 匹配 abcd、abxcd、abRABDOMcd、ab123cd等
+					app.get('/ab(cd)?e', function(req, res) {...});// 匹配 /abe 和 /abcde
+					
+					app.get('/a/', function(req, res) {...});// 匹配任何路径中含有 a 的路径：
+					app.get('/.*fly$', function(req, res) {...});// 匹配 butterfly、dragonfly，不匹配 butterflyman、dragonfly man等
+					```
+
+
+					Express路由路径用的是path-to-regexp
+					</section>
+
+					<section data-markdown="">
+						- 路由句柄
+
+						```js
+						app.get("/", function(req, res, next) {
+							//....
+						})
+						```
+						路由句柄有多种形式，可以是一个函数、一个函数数组，或者是两者混合，
+
+						```js
+						var cb0 = function (req, res, next) {
+						  console.log('CB0');
+						  next();
+						}
+
+						var cb1 = function (req, res, next) {
+						  console.log('CB1');
+						  next();
+						}
+
+						var cb2 = function (req, res) {
+						  res.send('Hello from C!');
+						}
+
+						app.get('/example/c', [cb0, cb1, cb2]);
+						app.get('/example/c', [cb0, cb1], function(req, res) {
+						
+						});
+						```
+					</section>
+					<section data-markdown="">
+						- app.route()
+						创建路由路径的链式句柄
+
+						```js
+						app.route('/book')
+							.get(function(req, res) {
+								res.send('Get a random book');
+							})
+							.post(function(req, res) {
+								res.send('Add a book');
+							})
+							.put(function(req, res) {
+								res.send('Update the book');
+							});
+						```
+					</section>
+					<section data-markdown="">
+						- express.Router
+
+						```js
+						//birds.js
+
+						var express = require('express');
+						var router = express.Router();
+
+						// 该路由使用的中间件
+						router.use(function timeLog(req, res, next) {
+						  console.log('Time: ', Date.now());
+						  next();
+						});
+						// 定义网站主页的路由
+						router.get('/', function(req, res) {
+						  res.send('Birds home page');
+						});
+						// 定义 about 页面的路由
+						router.get('/about', function(req, res) {
+						  res.send('About birds');
+						});
+
+						module.exports = router;
 						```
 
-					</section>
-					<section data-markdown="" style="text-align: justify;font-size: 28px;">
-						###	response对象
-						- response.redirect
-						- response.sendFile
-						- response.render
-
-					</section>
-					<section data-markdown="" style="text-align: justify;font-size: 28px;">
-						###	request对象
-						- request.ip
-						- request.files
-
+						```js
+						var birds = require('./birds');
+						...
+						app.use('/birds', birds);
+						```
+						应用即可处理发自 /birds 和 /birds/about 的请求
 					</section>
 
 				</section>
-				<section>
+				<section style="font-size: 80px;">
 					faker.js
-
-					用来mock数据，有自己的API，而且非常丰富
 				</section>
 				<section>
+					<section>
+						用来mock数据，有自己的API，而且非常丰富
+					</section>
 					<section data-markdown="">
-						###	install
+						install
 
 						```js
 						npm i faker --save
@@ -241,12 +377,12 @@
 					```js
 					var faker = require('faker');
 
-					var randomName = faker.name.findName();
-					var randomEmail = faker.internet.email();
-					var randomCard = faker.helpers.createCard();
+					var randomName = faker.name.findName(); //james
+					var randomEmail = faker.internet.email(); //geyulong@gmail.com
+					var randomCard = faker.helpers.createCard(); //
 					```
 					</section>
-					<section>
+					<section data-markdown="">
 						Faker.fake()
 
 						```js
@@ -255,7 +391,6 @@
 						```
 					</section>
 					<section data-markdown="" class="config">
-
 						Localization
 
 						```js
@@ -264,29 +399,27 @@
 					</section>
 
 				</section>
-				<section  data-markdown="">
-					<p style="	">json-server</p>
+				<section>
+					<section data-markdown="" style="font-size: 50px;">
+					json-server
+					</section>
+					<section data-markdown="">
+					install
+
 					```js
 						npm install json-server --save
 					```
-				</section>
-				<section  data-markdown="">
-					<p style="	">运行</p>
-					```js
-						json-server db.json -p 3003
-					```
+					</section>
+					<section  data-markdown="">
+						<p style="	">运行</p>
+						```js
+							json-server db.json -p 3003
+						```
 
-					安装完后，在本目录下创建一个xx.json,然后执行
+						安装完后，在本目录下创建一个xx.json,然后执行
+					</section>
 				</section>
 
-				<section  data-markdown="">
-					<p style="	">Mock.js</p>
-					```js
-						json-server db.json -p 3003
-					```
-
-					安装完后，在本目录下创建一个xx.json,然后执行
-				</section>
 			</div>
 
 		</div>
