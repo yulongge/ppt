@@ -81,17 +81,38 @@
 						<p>Chrome插件都长啥样?</p>
 					</section>
 					<section data-markdown="">
-						#### 基本上有八个形式
+						#### 基本上有七个个形式
 
-						- 浏览器右上角
-						- 地址栏右侧
-						- 右键菜
-						- 覆盖特定页面
-						- 开发者工具
-						- 选项页
-						- omnibox(是向用户提供搜索建议的一种方式)
+						- 浏览器按钮
 						- 桌面通知
+						- 多功能框
+						- 选项页面
+						- 替代页面
+						- 页面按钮
+						- 主题背景
+						- 右键菜
+						- 开发者工具
 
+					</section>
+					<section>
+						<p>浏览器按钮</p>
+						<img src="images/chrome_btn.png" />
+					</section>
+					<section>
+						<p>桌面通知</p>
+						<img src="images/chrome_desktop.png" />
+					</section>
+					<section>
+						<p>多功能框</p>
+						<img src="images/chrome_search.png" />
+					</section>
+					<section>
+						<p>页面按钮</p>
+						<img src="images/chrome_page.png" />
+					</section>
+					<section>
+						<p>主题背景</p>
+						<img src="images/chrome_theme.png" />
 					</section>
 					<section data-markdown="">
 						请看浏览器
@@ -720,6 +741,28 @@
 							onclick: function(){alert('您点击了右键菜单！');}
 						});
 						...
+
+						chrome.browserAction.setBadgeText({text: 'new'}); //badge
+						chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 255]});
+
+						...
+
+						// 创建自定义面板，同一个插件可以创建多个自定义面板
+						// 几个参数依次为：panel标题、图标（其实设置了也没地方显示）、要加载的页面、加载成功后的回调
+						chrome.devtools.panels.create('MyPanel', 'img/icon.png', 'mypanel.html', function(panel)
+						{
+							console.log('自定义面板创建成功！'); // 注意这个log一般看不到
+						});
+
+						...
+
+						chrome.notifications.create(null, {
+							type: 'basic',
+							iconUrl: 'img/icon.png',
+							title: '这是标题',
+							message: '您刚才点击了自定义右键菜单！'
+						});
+
 						```
 
 					</section>
@@ -775,15 +818,182 @@
 						### 打包
 					</section>
 
-					<section data-markdown="">
+					<section style="text-align: left;font-size: 25px;text-indent: 30px;">
 						当您为扩展程序打包时，扩展程序将获得唯一的密钥对，扩展程序的标识符基于公钥的散列，私有密钥用来为每一个版本的扩展程序签名，必须严格保护，不能由公众访问。注意千万不要将您的私有密钥包含在扩展程序中
 					</section>
+					<section data-markdown="" style="text-align: left;">
+						#### 创建包
 
+						- 进入以下URL，打开扩展程序管理页面:chrome://extensions
+						- 确保右上角的开发者模式复选框已选中.
+						- 单击打包扩展程序按钮，出现一个对话框。
+						- 在扩展程序根目录字段中，指定扩展程序所在文件夹的路径，例如，C:\myext。（忽略其他字段，您第一次为一个扩展程序打包时不需要指定私有密钥文件。）
+						- 单击打包扩展程序。打包程序将创建两个文件：一个 .crx 文件，是实际的可安装的扩展程序；另一个是 .pem 文件，包含私有密钥。
+					</section>
+					<section data-markdown="" style="text-align: left;">
+						#### 提示
 
+						不要丢失私有密钥！确保 .pem 文件保密，并存放在安全的地方。如果您今后需要做如下事情，您需要这一文件:
+						- 更新扩展程序
+						- 将扩展程序上传至 Chrome 网上应用店
 
+					</section>
+					<section data-markdown="" style="text-align: left;">
+						##### 更新包
+
+						- 增加 manifest.json 中的版本号。
+						- 进入如下 URL，打开扩展程序管理页面： chrome://extensions
+						- 单击打包扩展程序按钮，出现一个对话框。
+						- 在扩展程序根目录字段中指定扩展程序所在文件夹，例如 C:\myext。
+						- 在私有密钥文件字段中，指定已生成的用于该扩展程序的 .pem 文件位置，例如 C:\myext.pem。
+						- 单击打包扩展程序
+
+					</section>
+					<section data-markdown="" style="text-align: left;">
+						##### 发布包
+
+						- 将您创建 .crx 文件时生成的私有密钥文件重命名为 key.pem。
+						- 将 key.pem 文件放在您的扩展程序根目录中。
+						- 将这一目录压缩为 ZIP 文件。
+						- 使用 Chrome 开发者信息中心上传 ZIP 文件
+
+					</section>
+					<section data-markdown="" style="text-align: left;">
+						##### 命令行中打包
+
+						```js
+						chrome.exe --pack-extension=C:\myext --pack-extension-key=C:\myext.pem
+						```
+
+						- 命令chrome.exe（在 Linux 或 Mac OS X 上为 chrome）
+						- --pack-extension 指定扩展程序所在文件夹的位置
+						- --pack-extension-key 指定扩展程序私有密钥文件的位置
+
+					</section>
+					<section data-markdown="" style="text-align: left;">
+						##### 压缩包
+
+						- windows: Send to > Compressed (zipped) folder
+						- Mac OS X: control-click myapp and choose Compress "myapp"
+						- command: zip -r myapp.zip myapp
+
+					</section>
 
 				</section>
 
+				<section>
+					<section data-markdown="">
+						### 实例
+					</section>
+					<section data-markdown="">
+						### 目录
+
+						```js
+						├ eat
+    							├ manifest.json
+							├ popup.html
+							├ popup.css
+							├ popup.js
+							├ eat.png
+							├ js
+								├ background.js
+						```
+					</section>
+					<section data-markdown="" style="font-size: 26px;">
+						### 代码解析
+
+						```js
+						//manifest.json
+						{
+						    "name": "eat",
+						    "description": "eat",
+						    "manifest_version": 2,
+						    "minimum_chrome_version": "23",
+						    "version": "1.2",
+						    "offline_enabled": true,
+						    "background": {
+						        "scripts": ["js/background.js"]
+						    },
+						    "browser_action": {
+						        "default_icon": "eat.png",
+						        "default_popup": "popup.html",
+						        "default_title": "我们吃啥啊?"
+						    },
+						    /*"page_action": {
+						        "default_icon": "eat.png"
+						    },*/
+						    "permissions" : [
+						        "clipboardWrite",
+						        "contextMenus",
+						        "notifications",
+						        "declarativeContent"
+						    ],
+						    "chrome_url_overrides": {
+						        "newtab": "popup.html"
+						    },
+						    "icons": {
+						        "16": "eat.png"
+						    },
+						    //"options_page": "popup.html",
+						    "homepage_url": "http://manage.dev.acewill.net/"
+						}
+
+						```
+					</section>
+
+					<section>
+						<img src="images/popuphtml.png" style="height: 600px;"/>
+					</section>
+
+					<section data-markdown="">
+						```js
+						chrome.browserAction.setBadgeText({text: 'new'});
+						chrome.browserAction.setBadgeBackgroundColor({color: [255, 0, 0, 255]});
+
+						chrome.contextMenus.create({
+							title: "吃啥",
+							onclick: function(){alert('吃啥');}
+						});
+						chrome.notifications.create(null, {
+							type: 'basic',
+							iconUrl: 'eat.png',
+							title: '这是标题',
+							message: '您刚才点击了自定义右键菜单！'
+						});
+
+						chrome.runtime.onInstalled.addListener(function() {
+						  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
+						    chrome.declarativeContent.onPageChanged.addRules([
+						      {
+						        conditions: [
+						          new chrome.declarativeContent.PageStateMatcher({
+						            pageUrl: { urlContains: 'g' },
+						          })
+						        ],
+						        actions: [ new chrome.declarativeContent.ShowPageAction() ]
+						      }
+						    ]);
+						  });
+						});
+
+						```
+					</section>
+					<section >
+						<img src="images/eat_extension.png" style="height: 500px;"/>
+					</section>
+				</section>
+
+				<section data-markdown="">
+					#### 推荐
+
+					给大家推荐一下我经常用的插件
+
+					- Vimium 像vim一样操作chrome
+					- Google翻译
+					- Postman
+					- React Developer Tools 调试react
+					- Giliffy 绘制uml图，流程图
+				</section>
 			</div>
 
 		</div>
