@@ -486,6 +486,19 @@ img {
 		模块一旦被加载以后，就会被系统缓存。如果第二次加载该模块，则会返回缓存中的版本，这意味着模块实际上只会执行一次。如果希望模块执行多次，则可以让模块返回一个函数，然后多次调用。
 
 		---
+		`exports` 对象是当前模块的导出对象，用于导出模块公有方法和属性。别的模块通过require函数使用当前模块时得到的就是当前模块的exports对象。以下例子中导出了一个公有方法。
+		
+		`module` 对象可以访问到当前模块的一些相关信息，但最多的用途是替换当前模块的导出对象。例如模块导出对象默认是一个普通对象，如果想改成一个函数的话，可以使用以下方式。
+		
+		```js
+		exports.hello = function () {
+			console.log('Hello World!');
+		};
+		module.exports = function () {
+			console.log('Hello World!');
+		};
+		```
+		---
 
 		### 核心模块
 
@@ -503,6 +516,36 @@ img {
 
 		核心模块都在Node的lib子目录中，为了提高运行速度，他们安装时都会被编译成二进制文件，核心模块总是最优先加载的，如果你自己写了一个HTTP模块，require('http')加载的还是核心模块。
 
+
+		---
+		文件操作
+
+		- Buffer
+		- Stream
+		- File System
+		- Path
+
+
+
+		---
+		网络操作
+		- http
+		- https
+		- url
+		- querystring
+		- zlib
+		- net
+
+		---
+
+		进程管理
+		- process
+		- child process
+		- cluster
+		
+
+		---
+		异步编程
 		---
 		### 自定义模块
 
