@@ -103,10 +103,37 @@ img {
 		![node](https://yulongge.github.io/images/nodejs/nodejs.jpg)
 
 		---
+		## Nodejs 杂谈
+		---
 
 		### 简介
 
-		Node.js就是运行在服务器端的JavaScript，是一个**事件驱动I/O服务端** JavaScript环境，基于Google的V8引擎。
+		Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境。
+
+		Node.js 使用了一个事件驱动、非阻塞式 I/O 的模型，使其轻量又高效。 
+
+		Node.js 的包管理器 npm，是全球最大的开源库生态系统。
+
+		---
+
+		- V8引擎(浏览器都有哪些引擎)
+		- 脚本语言
+		- 事件驱动
+		- I/O模型
+		- NPM
+
+		> Everything runs in parallel except your code!
+
+		---
+
+		JS是脚本语言，脚本语言都需要一个解析器才能运行。对于写在HTML页面里的JS，浏览器充当了解析器的角色。而对于需要独立运行的JS，NodeJS就是一个解析器。
+
+		每一种解析器都是一个运行环境，不但允许JS定义各种数据结构，进行各种计算，还允许JS使用运行环境提供的内置对象和方法做一些事情。例如运行在浏览器中的JS的用途是操作DOM，浏览器就提供了document之类的内置对象。而运行在NodeJS中的JS的用途是操作磁盘文件或搭建HTTP服务器，NodeJS就相应提供了fs、http等内置对象。
+
+		---
+		NodeJS的作者(Ryan Dahl)说，他创造NodeJS的目的是为了实现高性能Web服务器，他首先看重的是事件机制和异步IO模型的优越性，而不是JS。但是他需要选择一种编程语言实现他的想法，这种编程语言不能自带IO功能，并且需要能良好支持事件机制。JS没有自带IO功能，天生就用于处理浏览器中的DOM事件，并且拥有一大群程序员，因此就成为了天然的选择。
+
+		对于前端而言，虽然不是人人都要拿NodeJS写一个服务器程序，但简单可至使用命令交互模式调试JS代码片段，复杂可至编写工具提升工作效率。NodeJS生态圈正欣欣向荣
 
 		---
 
@@ -118,11 +145,11 @@ img {
 
 		基于我们在用windows 和 mac ，所以介绍这两种操作系统的安装配置。
 
-		### window
+		#### window
 
 		下载 Windows Installer (.msi)
 
-		### mac
+		#### mac
 
 		`homebrew`
 		```js
@@ -135,9 +162,11 @@ img {
 
 		---
 
-		### 管理node版本
+		#### 管理node版本
 
-		大量开发者的贡献使Node版本的迭代速度很快，版本很多，所以升级Node版本就成为了一个问题。目前有n和nvm这两个工具可以对Node进行无痛升级，本文简单介绍一下二者的使用
+		大量开发者的贡献使Node版本的迭代速度很快，版本很多，所以升级Node版本就成为了一个问题。
+		
+		目前有n和nvm这两个工具可以对Node进行无痛升级，本文简单介绍一下二者的使用。
 
 		---
 
@@ -145,7 +174,13 @@ img {
 
 		n是Node的一个模块，作者是TJ Holowaychuk（鼎鼎大名的Express框架作者），就像它的名字一样，它的理念就是简单.
 
-		`no subshells, no profile setup, no convoluted api, just simple`
+		`no subshells, `
+
+		`no profile setup,`
+
+		`no convoluted api,`
+		
+		`just simple`
 
 		```js
 		npm install -g n
@@ -276,12 +311,32 @@ img {
 		### npm 常用命令
 
 		```js
-		//安装模块
-		npm install [name]
+		npm install 安装模块
+		npm uninstall 卸载模块
+		npm update 更新模块
+		npm outdated 检查模块是否已经过时
+		npm ls 查看安装的模块
+		npm init 在项目中引导创建一个package.json文件
+		npm help 查看某条命令的详细帮助
+		npm root 查看包的安装路径
+		npm config 管理npm的配置路径
+		npm cache 管理模块的缓存
+		npm start 启动模块
+		npm stop 停止模块
+		npm restart 重新启动模块
+		npm test 测试模块
+		npm version 查看模块版本
+		npm view 查看模块的注册信息
+		npm adduser  用户登录
+		npm publish 发布模块
+		npm access 在发布的包上设置访问级别
+		npm package.json的语法
 		```
+
+		https://github.com/yulongge/Vampire/blob/master/blog/npm_command.md
 		---
 
-		### npm 镜像(淘宝)
+		#### npm 镜像(淘宝)
 
 		这是一个完整 npmjs.org 镜像，你可以用此代替官方版本(只读)，同步频率目前为 10分钟 一次以保证尽量与官方服务同步
 
@@ -308,6 +363,10 @@ img {
 		```js
 		npm init
 		```
+
+		package.json中各个属性的意义：
+
+		https://github.com/yulongge/Vampire/blob/master/blog/package.json.md
 		---
 
 		### shrinkwrap
@@ -413,27 +472,34 @@ img {
 		- 下划线(_)变量
 		- REPL命令
 
-		---
-
-		### 语法API
+		https://github.com/yulongge/Vampire/blob/master/blog/REPL.json.md
 
 		---
 
-		### 全局对象
+		#### 语法API
+
+		http://nodejs.cn/api/
+
+		---
+
+		#### 全局对象
 
 		JavaScript 中有一个特殊的对象，称为全局对象(Global Object),它及其所有的属性都可以在程序的任何地方访问，即全局变量。
 
-		所有的全局变量都是global对象的属性，global最根本的作用是作为全局变量的宿主。在node.js中不会有全局变量，因为用户代码都是属于当前模块的。
+		所有的全局变量都是global对象的属性，global最根本的作用是作为全局变量的宿主。
+		
+		在node.js中不会有全局变量，因为用户代码都是属于当前模块的。
 
-		- process: 该对象表示node所在的当前进程，允许开发者与进程互动
-			通常在写本地命令程序的时候，少不了要和它打交道。
-		- console: 指向node内置的console模块，提供命令行运行环境中的标准输入，输出功能,习惯行为跟浏览器的实施标准调试工具的console一致。
 		---
 
 		#### 全局变量
 
 		- __filename: 指向当前运行的脚本文件名。
 		- __dirname: 指向当前运行脚本所在的目录。
+
+		- process: 该对象表示node所在的当前进程，允许开发者与进程互动
+			通常在写本地命令程序的时候，少不了要和它打交道。
+		- console: 指向node内置的console模块，提供命令行运行环境中的标准输入，输出功能,习惯行为跟浏览器的实施标准调试工具的console一致。
 
 		---
 		#### 全局函数
@@ -444,10 +510,8 @@ img {
 		- clearInterval()
 		- require()
 		- Buffer()
-		- module
-		- module.exports
 		---
-		### 模块
+		#### 模块
 
 		Node.js采用模块化结构，按照CommonJs规范定义和使用模块。模块与文件是一一对应关系，即加载一个模块，实际上就是加载对应的一个模块文件。
 
@@ -483,17 +547,11 @@ img {
 
 		如果模块目录中没有package.json文件，node.js会尝试在模块目录中找index.js,或index.node文件进行加载。
 
-		模块一旦被加载以后，就会被系统缓存。如果第二次加载该模块，则会返回缓存中的版本，这意味着模块实际上只会执行一次。如果希望模块执行多次，则可以让模块返回一个函数，然后多次调用。
-
 		---
-		`exports` 对象是当前模块的导出对象，用于导出模块公有方法和属性。别的模块通过require函数使用当前模块时得到的就是当前模块的exports对象。以下例子中导出了一个公有方法。
-		
+	
 		`module` 对象可以访问到当前模块的一些相关信息，但最多的用途是替换当前模块的导出对象。例如模块导出对象默认是一个普通对象，如果想改成一个函数的话，可以使用以下方式。
 		
 		```js
-		exports.hello = function () {
-			console.log('Hello World!');
-		};
 		module.exports = function () {
 			console.log('Hello World!');
 		};
@@ -516,77 +574,88 @@ img {
 
 		核心模块都在Node的lib子目录中，为了提高运行速度，他们安装时都会被编译成二进制文件，核心模块总是最优先加载的，如果你自己写了一个HTTP模块，require('http')加载的还是核心模块。
 
-
-		---
-		文件操作
-
-		- Buffer
-		- Stream
-		- File System
-		- Path
-
-
-
 		---
 		网络操作
+
+		不了解网络编程的程序员不是好前端，而NodeJS恰好提供了一扇了解网络编程的窗口。通过NodeJS，除了可以编写一些服务端程序来协助前端开发和测试外，还能够学习一些HTTP协议与Socket协议的相关知识，这些知识在优化前端性能和排查前端故障时说不定能派上用场。
 		- http
 		- https
-		- url
-		- querystring
-		- zlib
-		- net
 
+		```js
+		var http = require('http');
+
+		http.createServer(function (request, response) {
+			response.writeHead(200, { 'Content-Type': 'text-plain' });
+			response.end('Hello World\n');
+		}).listen(8080);
+
+		```
 		---
 
-		进程管理
-		- process
-		- child process
-		- cluster
+		```js
+		var express = require('express');
+		var app = express();
 		
-
+		app.get('/', function (req, res) {
+		res.send('Hello World');
+		})
+		
+		var server = app.listen(8081, function () {
+		
+			...
+		
+		})
+		```
 		---
-		异步编程
-		---
-		### 自定义模块
+		文件操作(fs)
 
-		Node模块采用CommonJS规范，只要符合这个规范，就可以自定义模块。
-
-		module变量是整个模块文件的顶层变量，它的exports属性就是模块向外输出的接口，可以输出everything.
+		让前端觉得如获神器的不是NodeJS能做网络编程，而是NodeJS能够操作文件。小至文件查找，大至代码编译，几乎没有一个前端工具不操作文件。换个角度讲，几乎也只需要一些数据处理逻辑，再加上一些文件操作，就能够编写出大多数前端工具。
 
 		```js
-		//foo.js
-		module.exports = function(x) {
-			console.log(x)
-		};
+		fs.open(path, flags[, mode], callback) //打开文件
+		fs.stat(path, callback) //获取文件信息
+		fs.writeFile(file, data[, options], callback) //写入文件
+		fs.read(fd, buffer, offset, length, position, callback) //写入文件
+		fs.close(fd, callback) //关闭文件
+		```
 
-		var out = new Object();
+		---
 
-		function p(string) {
-			console.log(string);
+		```js
+		var fs = require("fs");
+
+		// 异步读取
+		fs.readFile('input.txt', function (err, data) {
+		if (err) {
+			return console.error(err);
 		}
+		console.log("异步读取: " + data.toString());
+		});
 
-		out.print = p;
-		module.exports = out;
+		// 同步读取
+		var data = fs.readFileSync('input.txt');
+		console.log("同步读取: " + data.toString());
+
+		console.log("程序执行完毕。");
 		```
 
-		```js
-		var m = require('./foo');
-		m('test node module');
-		//test node module
-
-		var m = require('./foo');
-		m.print('test node module exports one object')
-		//test node module exports one object
-		```
 		---
-		### 异常处理
 
-		Node是单线程运行环境，一旦抛出的异常没有被捕获，就会引起整个进程的崩溃。所以，Node异常处理对于保证系统的稳定运行非常重要。
+		工具模块
 
-		- 使用throw语句抛出一个错误对象，即抛出异常。
-		- 将错误对象传递给回调函数，由回调函数负责发出错误
-		- 通过EventEmitter接口，发出一个error事件。
+		在 Node.js 模块库中有很多好用的模块。接下来我们为大家介绍几种常用模块的使用。
 
+		- Util 是一个Node.js 核心模块，提供常用函数的集合，用于弥补核心JavaScript 的功能 过于精简的不足
+		- OS 模块 提供基本的系统操作函数。
+		- Path 模块 提供了处理和转换文件路径的工具
+		- Net 模块 用于底层的网络通信。提供了服务端和客户端的的操作
+		- DNS 模块 用于解析域名
+
+		---
+		其他
+
+		- 多进程
+		- 数据库链接
 		---
 
 		### 衍生
@@ -596,8 +665,6 @@ img {
 		- [koa](https://koa.bootcss.com/) 基于Node.js平台的下一代web开发框架，koa 是由 Express 原班人马打造的。
 
 		- [yarn](https://yarn.bootcss.com/) Yarn 缓存了每个下载过的包，所以再次使用时无需重复下载。 同时利用并行下载以最大化资源利用率，因此安装速度更快
-
-		- [libuv](https://github.com/luohaha/Chinese-uvbook/blob/master/source/introduction.md)
 
 		---
 
