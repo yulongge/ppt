@@ -100,7 +100,9 @@ img {
 	<body>
 		<textarea id="source">
 		
-		### Immutable
+		## Immutable
+
+		---
 		
 		Immutable数据就是一旦创建，就不能更改的数据。每当对Immutable对象进行修改的时候，就会返回一个新的Immutable对象，以此来保证数据的不可变
 		
@@ -558,55 +560,7 @@ img {
 		// => 4
 		```
 		---
-		`10. Seq`
 
-		Seq 有两个特点：
-		
-		- immutable，一旦创建就不能被修改；
-		
-		- lazy，惰性求值。
-		
-		在下面的代码中，虽然组合了多种遍历操作，但实际上并不会有任何的求值操作，只是纯粹的声明一个 Seq：
-
-		```js
-		var oddSquares = Immutable.Seq.of(1,2,3,4,5,6,7,8)
-			.filter(x => x % 2)
-			.map(x => x * x);
-		```
-
-		---
-
-		如果要从 oddSquares 中取出索引为 1 的元素，则执行过程为
-
-		```js
-		console.log(oddSquares.get(1));
-
-		// filter(1)
-		// filter(2)
-		// filter(3)
-		// map(3)
-		// => 9
-		```
-		默认情况下 Seq 的惰性计算结果不会被缓存，比如在下面的代码中，由于每个 join() 都会遍历执行 map，所以 map 总共执行了六次
-
-		```js
-		var squares = Seq.of(1,2,3).map(x => x * x);
-		squares.join() + squares.join();
-		```
-
-		如果开发者知道 Seq 的结果会被反复用到，那么就可以使用 cacheResult() 将惰性计算的结果保存到内存中
-
-		```js
-		var squares = Seq.of(1,2,3).map(x => x * x).cacheResult();
-		squares.join() + squares.join();
-		```
-		---
-		`11. Iterable 和 Collection`
-
-		Iterable 是键值对形式的集合，其实例可以执行遍历操作，是 immutable.js 中其他数据类型的基类，所有扩展自 Iterable 的数据类型都可以使用 Iterable 所声明的方法，比如 map 和 filter 等。
-		
-		Collection 是 Concrete Data Structure 的基类，使用该类时需要至少继承其子类中的一个：Collection.Keyed / Collection.Indexed / Collection.Set
-		---
 		### React
 
 		在 React 官方文档的《Advanced Performance》 一节中，专门对 React 的性能瓶颈、优化方式做了详细的解析。
