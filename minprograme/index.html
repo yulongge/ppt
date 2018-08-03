@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Immutable</title>
+		<title>小程序 - 填坑之路</title>
 		<style>
 			body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -107,38 +107,76 @@ img {
 		当然，挖坑者和填坑者经常是同一个人，so...我们开始吧。。。
 
 		---
+		
+		```
+		怎么指定小程序的默认页面?
+		```
+		app.json
+		
+		`pages` : 接受一个数组，来指定页面路径。数组的第一项代表小程序的初始页面(即默认页面),文件名不需要些后缀
 
-		##### 代码构成
+		---
 
-		##### json
-
-		1.app.json
-
-		`pages`: 接受一个数组，来指定页面路径。数组的第一项代表小程序的初始页面(即默认页面),文件名不需要些后缀
+		```
+		app.json的window属性需要注意哪些地方?
+		```
 
 		`window`: 设置小程序的状态栏、导航条、标题、窗口背景色。
 		- navigationBarTextStyle: 仅支持 black/white
 		- navigationBarTitleText: 超过字符串长度，小程序会自动加入省略号
 		- navigationStyle: 只能在app.json设置
 
+		---
+		```
+		怎么说一个页面是tabbar页面?
+		```
+
 		`tabBar`: tab应用，可以用tabBar配置项指定tab栏的表现
 
 		- 当设置 position 为 top 时，将不会显示 icon
 		- tabBar 中的 list 是一个数组，只能配置最少2个、最多5个 tab，tab 按数组的顺序排序
+
+		即只要是定义为 tabBar 的页面，底部都有 tabBar。
+
+		```json
+		"tabBar": {
+			"color": "#7F7F7F",
+			"backgroundColor": "#FFF",
+			"selectedColor": "#FD593E",
+			"borderStyle": "black",
+			"list": [
+				{
+					"pagePath": "pages/index/index",
+					"text": "首页",
+					"iconPath": "images/tabbar-index-off.png",
+					"selectedIconPath": "images/tabbar-index.png"
+				},
+				{
+					"pagePath": "pages/mine/mine",
+					"text": "会员",
+					"iconPath": "images/tabbar-member-off.png",
+					"selectedIconPath": "images/tabbar-member.png"
+				}
+			]
+		}
+		```
 			
 		---
 
-		`networkTimeout`: 设置各种网络请求的超时时间
+		```
+		networkTimeout 注意的地方
+		```
+
+		`networkTimeout` : 设置各种网络请求的超时时间
 
 		- 默认为60000ms
 		- request, connectSocket, uploadFile, downloadFile的设置
 
 		---
-		#### wxml
 
-		数据绑定
-
-		wxml中数据绑定用了Mustache语法(双大括号)将变量抱起来。
+		```
+		wxml中数据绑定用了Mustache语法,需要注意哪些地方?
+		```
 
 		`关键字(需要在双引号之内)`
 
@@ -164,15 +202,22 @@ img {
 
 		---
 
-		列表渲染
+		```
+		列表渲染注意的地方
+		```
 
-		当数据改变触发渲染层重新渲染的时候，会校正带有 key 的组件，框架会确保他们被重新排序，而不是重新创建，以确保使组件保持自身的状态，并且提高列表渲染时的效率。
+		wx:key 的值以两种形式提供
 
-		`wx:for`可以循环数组，对象，字符串
+		- 字符串，代表在 for 循环的 array 中 item 的某个 property，该 property 的值需要是列表中唯一的字符串或数字，且不能动态改变。
+		- 保留关键字 *this 代表在 for 循环中的 item 本身，这种表示需要 item 本身是一个唯一的字符串或者数字
+		
+		`wx:for` 可以循环数组，对象，字符串
 
 		---
 
+		```
 		条件渲染
+		```
 
 		wx:if 的条件值切换时，框架有一个局部渲染的过程，因为它会确保条件块在切换时销毁或重新渲染
 
@@ -180,22 +225,33 @@ img {
 
 		一般来说，wx:if 有更高的切换消耗而 hidden 有更高的初始渲染消耗。因此，如果需要频繁切换的情景下，用 hidden 更好，如果在运行时条件不大可能改变则 wx:if 较好
 
-		dataset获取
+		---
 
-		在组件中可以定义数据，这些数据将会通过事件传递给 SERVICE。 书写方式： 以data-开头，多个单词由连字符-链接，不能有大写(大写会自动转成小写)如data-element-type，最终在 event.currentTarget.dataset 中会将连字符转成驼峰elementType
+		```
+		dataset获取
+		```
+
+		在组件中可以定义数据。 
+		
+		书写方式： 以data-开头，多个单词由连字符-链接，不能有大写(大写会自动转成小写)如data-element-type，最终在 event.currentTarget.dataset 中会将连字符转成驼峰elementType
 		
 		---
-		#### wxss
+		```
+		wxss
+		```
+		不支持级联选择器  
 
-		WXSS 的用法类似于 CSS，并在 CSS 的基础上，扩展了 rpx 尺寸单位和样式导入功能。
+		支持标签选择器: view, input ...
+
+		本地资源无法通过css获取
 
 		WXSS 可以使用内联样式，但这样会影响渲染速度。
 
-		每个页面自己的 page.wxss 样式表，会覆盖全局样式表 app.wxss。
-
 		---
 
-		#### js
+		```
+		js
+		```
 
 		小程序的逻辑层由 JavaScript 语言完成。但因为小程序不在浏览器中运行，所以 JS 在 web 浏览器中的一些函数不能用，如 document、window 等。
 
@@ -203,12 +259,18 @@ img {
 
 		---
 
-		#### wxs
+		```
+		wxs
+		```
 
 		WXS 代码可以编写在 wxml 文件中的 <wxs> 标签内，或以 .wxs 为后缀名的文件内。
 
+		在 android 设备中，小程序里的 wxs 与 js 运行效率无差异，而在 ios 设备中，小程序里的 wxs 会比 js 快 2~20倍。
+
 		---
-		##### 小程序逻辑层
+		```
+		小程序逻辑层
+		```
 
 		- App() 必须在 app.js 中注册，且不能注册多个。
 		- 不要在定义于 App() 内的函数中调用 getApp() ，使用 this 就可以拿到 app 实例。
@@ -216,14 +278,18 @@ img {
 		- 通过 getApp() 获取实例之后，不要私自调用生命周期函数。
 
 		---
-		#### 注册页面
+		```
+		注册页面
+		```
 
 		Page() 函数用来注册一个页面。接受一个 object 参数，其指定页面的初始数据、生命周期函数、事件处理函数等
 
 		- object 内容在页面加载时会进行一次深拷贝，需考虑数据大小对页面加载的开销
 
 		---
-		#### 生命周期
+		```
+		生命周期
+		```
 
 		```js
 		app ( {
@@ -248,10 +314,14 @@ img {
 		```
 
 		---
-		#### 页面相关函数
+		```
+		页面相关函数
+		```
 
-		`enablePullDownRefresh`:记得停下来: wx.stopPullDownRefresh
+		`enablePullDownRefresh` : 记得停下来: wx.stopPullDownRefresh
+
 		`onReachBottom`: 如果页面是scroll-view则无效
+		
 		`setData`: 异步的
 
 		```js
@@ -262,12 +332,19 @@ img {
 
 		直接修改 this.data 而不调用 this.setData 是无法改变页面的状态的，还会造成数据不一致。
 
-		单次设置的数据不能超过1024kB，请尽量避免一次设置过多的数据
+		单次设置的数据不能超过`1024kB`，请尽量避免一次设置过多的数据
 
 		请不要把 data 中任何一项的 value 设为 undefined ，否则这一项将不被设置并可能遗留一些潜在问题
 
+		```
+		Q：setData方法是有react那样的虚拟dom优化吗？
+		A：有做虚拟DOM的优化，但设置相同数据还是会触发新渲染的。
+		```
+
 		---
-		#### 路由
+		```
+		路由
+		```
 
 		对于路由的触发方式以及页面生命周期函数如下：
 
@@ -287,10 +364,13 @@ img {
 		- reLaunch 可以打开任意页面。
 		- 页面底部的 tabBar 由页面决定，即只要是定义为 tabBar 的页面，底部都有 tabBar。
 		- 调用页面路由带的参数可以在目标页面的onLoad中获取。
+		- wx.navigateTo 目前页面路径最多只能十层
 
 		---
 
-		#### 小程序事件
+		```
+		小程序事件
+		```
 
 		事件分为冒泡事件和非冒泡事件
 
@@ -332,11 +412,15 @@ img {
 
 		---
 
-		### 组件
+		```
+		组件
+		```
 
 		一些样式，性能，细节
 
-		#### button
+		```
+		button
+		```
 
 		button 的边框样式是用`after`实现的。
 
@@ -347,14 +431,20 @@ img {
 		```
 		---
 
-		#### input
+		```
+		input
+		```
 
 		- placeholder样式：style/class
-		- `_searchEvent`
+		
+		- `bindconfirm` 
+		- 键盘输入问题
 
 		---
 
-		#### form
+		```
+		form
+		```
 
 		```html
 		<form bindsubmit="submitInfo" report-submit="{{true}}" > 
@@ -366,12 +456,24 @@ img {
 
 		---
 
-		#### swiper
+		```
+		swiper
+		```
 
 		如果在 bindchange 的事件回调函数中使用 setData 改变 current 值，则有可能导致 setData 被不停地调用，因而通常情况下请在改变 current 值前检测 source 字段来判断是否是由于用户触摸引起
 
+		```js
+		const {source} = e.detail;
+		if(source=="touch" || source=="autoplay"){
+			this.setData({
+				currentSwiper: e.detail.current
+			})
+		}
+		```
 		---
-		#### scroll-view
+		```
+		scroll-view
+		```
 
 		- 使用竖向滚动时，需要给<scroll-view/>一个固定高度，通过 WXSS 设置 height。
 		- 在滚动 scroll-view 时会阻止页面回弹，所以在 scroll-view 中滚动，是无法触发 onPullDownRefresh
@@ -380,15 +482,104 @@ img {
 		- 子项不设置 `display:inline-block` 会出现滚动条
 
 		---
-		#### image
+		```
+		image
+		```
 
 		image组件默认宽度300px、高度225px
+		
+		mode: 图片剪裁，缩放的模式
+
+		lazy-load: 只针对page与scroll-view下的image有效
 
 		---
 
-		### API
+		```
+		弹出层滚动穿透问题
+		```
 
-		#### 跳转(redirect, relaunch...)
+		1.如果弹出层没有滚动事件，就直接在蒙板和弹出层上加 catchtouchmove;
+
+		```
+		<template name="popup-modal">
+			<view class="modal-overlay" catchtouchmove />
+			<view class="popup" catchtouchmove>
+				<view class="popup-title">title</view>
+				<view class="popup-content">content</view>
+			</view>
+		</template>
+		```
+
+		---
+
+		2.弹出层有滚动
+
+		在弹出层出现的时候给底部的containerView加上一个class，消失的时候移除。
+
+		```html
+		<view class="{{showMask?'not-scroll':''}}">
+
+		.not-scroll{
+		
+				top:0px;
+		
+				left: 0px;
+		
+				width: 100%;
+		
+				height: 100%;
+		
+				overflow: hidden;
+		
+				position: fixed;
+		
+				z-index: 0;
+		
+		}
+		```
+
+		这种方法简单有效，但会改变页面原本滚动的位置（会滚动到顶部）
+
+		---
+
+		给底部的containerView用<scroll-view>包裹起来，动态设置scroll-y，注意需要添加额外的样式：
+
+		```html
+		//somefile.wxss
+		.page,
+		page {
+			height: 100%;
+			overflow: hidden;
+		}
+		scroll-view {
+			height: 100%;
+		}
+
+		// somefile.wxml
+		<scroll-view
+			scroll-y="{{!showMask}}"
+			scroll-with-animation 
+			enable-back-to-top="{{!showMask}}">
+		</scroll-view>
+		```
+
+		注意一下`scroll-view`的限制
+
+		---
+
+		```
+		自定义组件
+		```
+
+		```
+		问: 自定义组件外部view没有正确插入到slot节点内中
+		答: 目前开发者工具不会展示 slot 里面的内容和 slot 节点本身，请以页面表现为准。我们之后会改进。
+		```
+		---
+
+		```
+		跳转(redirect, relaunch...)
+		```
 
 		偶尔的wx.redirectTo 和 wx.reLaunch 失效
 
@@ -403,11 +594,19 @@ img {
 		```
 
 		---
-		#### wx.canIUse
+		```
+		wx.canIUse
+		```
+
+		做兼容
 
 		判断小程序的API，回调，参数，组件等是否在当前版本可用
 
-		#### wx.getExtConfig
+		---
+
+		```
+		wx.getExtConfig
+		```
 
 		wx.getExtConfig 暂时无法通过 wx.canIUse 判断是否兼容，开发者需要自行判断 wx.getExtConfig 是否存在来兼容
 
@@ -419,21 +618,41 @@ img {
 
 		---
 
-		#### storage
+		```
+		storage
+		```
 
 		本地数据存储的大小限制为 10MB
 
-		#### scanCode
+		---
+
+		```
+		scanCode
+		```
 
 		会隐藏小程序，会调用hide方法
 
 		- path:当所扫的码为当前小程序的合法二维码时，会返回此字段，内容为二维码携带的 path
+		---
+		```
+		wx.requestPayment
+		```
 
-		#### wx.requestPayment
+		package 参数形式: 
 
-		- package 参数形式: 
+		```
+		package: "prepay_id=*"
+		```
 
 		支付完成，成功页，也会离开小程序，调取hide方法
+
+		---
+
+		```
+		wx.showToast
+		```
+
+		icon不是`none`的时候字数限制7个
 
 		---
 
@@ -442,6 +661,8 @@ img {
 		- https://developers.weixin.qq.com/miniprogram/dev/
 		- http://www.ifanr.com/minapp/786415
 		- https://www.cnblogs.com/lhyforfront/p/7428684.html
+		- https://segmentfault.com/a/1190000012282464
+		- http://www.cnblogs.com/ihardcoder/p/6097941.html
 
 	</textarea>
 		<script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
